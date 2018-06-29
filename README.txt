@@ -13,6 +13,6 @@ hello.go
 > After authentication, go to the directory where the Shared_Folder is saved
 > Run "make"
 > Run ./calc++ to execute the input from the text file hello.go
-> Check grammar.txt for validation
+> Check grammar.txt and calc++-parser.output for validation
 
 That's all!
