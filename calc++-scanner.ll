@@ -1,5 +1,5 @@
 /***********************
- * Example of C++ in Bison (yacc) 
+ * Example of C++ in Bison (yacc)
  * Compare Bison Manual, Section 10.1.6 A Complete C++ Example
  * https://www.gnu.org/software/bison/manual/html_node/A-Complete-C_002b_002b-Example.html
  * The Makefile has been simplified radically, but otherwise
@@ -32,9 +32,8 @@ static yy::location loc;
 %}
 %option noyywrap nounput batch debug noinput
 id    [a-zA-Z][a-zA-Z_0-9]*
-int   [0-9]+
 blank [ \t]
-
+line  [ \n]
 %{
   // Code run each time a pattern is matched.
   # define YY_USER_ACTION  loc.columns (yyleng);
@@ -47,28 +46,24 @@ blank [ \t]
   loc.step ();
 %}
 
-{blank}+   loc.step ();
-[\n]+      loc.lines (yyleng); loc.step ();
-"-"      return yy::calcxx_parser::make_MINUS(loc);
-"+"      return yy::calcxx_parser::make_PLUS(loc);
-"*"      return yy::calcxx_parser::make_STAR(loc);
-"/"      return yy::calcxx_parser::make_SLASH(loc);
-"("      return yy::calcxx_parser::make_LPAREN(loc);
-")"      return yy::calcxx_parser::make_RPAREN(loc);
-":="     return yy::calcxx_parser::make_ASSIGN(loc);
+
+{blank}+              loc.step ();                                     // Skip white spaces.
+[\n]+                 loc.lines (yyleng); loc.step ();
+[\r]+                 loc.step ();                                     // New line.
+"import"              return yy::calcxx_parser::make_IMPORT(yytext, loc);
+"package"             return yy::calcxx_parser::make_PACKAGE(yytext, loc);
+"main"                return yy::calcxx_parser::make_MAIN(yytext, loc);
+"func"                return yy::calcxx_parser::make_FUNCTION(yytext, loc);
+"("                   return yy::calcxx_parser::make_LPAREN(loc);
+")"                   return yy::calcxx_parser::make_RPAREN(loc);
+"\""                  return yy::calcxx_parser::make_QUOTATIONMARK(loc);
+"{"                   return yy::calcxx_parser::make_LCURLY(loc);
+"}"                   return yy::calcxx_parser::make_RCURLY(loc);
 
 
-{int}      {
-  errno = 0;
-  long n = strtol (yytext, NULL, 10);
-  if (! (INT_MIN <= n && n <= INT_MAX && errno != ERANGE))
-    driver.error (loc, "integer is out of range");
-  return yy::calcxx_parser::make_NUMBER(n, loc);
-}
-
-{id}       return yy::calcxx_parser::make_IDENTIFIER(yytext, loc);
-.          driver.error (loc, "invalid character");
-<<EOF>>    return yy::calcxx_parser::make_END(loc);
+{id}                   return yy::calcxx_parser::make_IDENTIFIER(yytext, loc);
+.                      driver.error (loc, "invalid character");
+<<EOF>>                return yy::calcxx_parser::make_END(loc);
 %%
 
 void
@@ -91,4 +86,3 @@ calcxx_driver::scan_end ()
 {
   fclose (yyin);
 }
-

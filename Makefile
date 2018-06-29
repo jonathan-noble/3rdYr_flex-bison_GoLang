@@ -19,7 +19,7 @@
 ####################################################################
 # Uncomment only one of the next two lines (choose your c++ compiler)
 # CC=g++
-CC=clang++
+CC=clang++-6.0
 
 LEX=flex
 YACC=bison

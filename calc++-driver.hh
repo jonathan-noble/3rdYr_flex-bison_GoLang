@@ -10,6 +10,40 @@
 // ... and declare it for the parser's sake.
 YY_DECL;
 
+
+// All of the token types are defined here
+enum TokenType
+{
+   Undefined,
+   Quotation,
+   LParen,
+   RParen,
+   Import,
+   Package,
+   String,
+   List,
+   Main,
+   LCurly,
+   RCurly,
+   Function,
+   Fill,
+   Empty
+};
+
+
+/* ASTNode class */
+class ASTNode {
+  public:
+  TokenType type;
+  std::string value;
+
+  ASTNode* left;
+  ASTNode* middle;
+  ASTNode* right;
+
+  ASTNode();
+};
+
 // Conducting the whole scanning and parsing of Calc++.
 class calcxx_driver
 {
@@ -17,9 +51,10 @@ public:
   calcxx_driver ();
   virtual ~calcxx_driver ();
 
-  std::map<std::string, int> variables;
+  // createNode function added
+  ASTNode* node;
+  ASTNode* createNode(TokenType type, ASTNode* left, ASTNode* middle, ASTNode* right, std::string value);
 
-  int result;
 
   // Handling the scanner.
   void scan_begin ();

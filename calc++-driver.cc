@@ -4,8 +4,6 @@
 calcxx_driver::calcxx_driver ()
   : trace_scanning (false), trace_parsing (false)
 {
-  variables["one"] = 1;
-  variables["two"] = 2;
 }
 
 calcxx_driver::~calcxx_driver ()
@@ -34,4 +32,24 @@ void
 calcxx_driver::error (const std::string& m)
 {
   std::cerr << m << std::endl;
+}
+
+
+/* createNode function similar to the first lab which has three children(: left, middle, right) and contains a string value*/
+ASTNode* calcxx_driver::createNode(TokenType type, ASTNode* left, ASTNode* middle, ASTNode* right, std::string value){
+    ASTNode* node = new ASTNode;
+    node->type = type;
+    node->left = left;
+    node->middle = middle;
+    node->right = right;
+    node->value = value;
+
+    return node;
+}
+
+// ASTNode Constructor
+ASTNode::ASTNode(){
+  left= NULL;
+  right= NULL;
+  middle= NULL;
 }

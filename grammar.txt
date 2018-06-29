@@ -1,0 +1,11 @@
+S 	   ->	Package | Imports | Function
+Package    ->	"Package" String S
+Import	   ->	imports Import
+imports	   ->	Identifier | (List) | Epsilon
+List	   ->   " Identifier " List
+Function   -> 	function Function
+function   ->	Identifier LParen RParen LCurly RCurly
+Identifier ->	"Identifier" | Epsilon
+
+
+	
